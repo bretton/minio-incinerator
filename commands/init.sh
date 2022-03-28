@@ -583,7 +583,7 @@ cat >site.yml<<"EOF"
     become_user: root
     shell:
       cmd: |
-        ssh-keyscan -T 20 -p 10222 {{ minio_nat_gateway }}
+        ssh-keyscan -T 20 -p {{ minio2_ssh_port }} {{ minio_nat_gateway }}
 
   - name: Wait for port 22 to become open, wait for 2 seconds
     wait_for:
@@ -651,7 +651,7 @@ cat >site.yml<<"EOF"
     become_user: root
     shell:
       cmd: |
-        ssh-keyscan -T 20 -p 10322 {{ minio_nat_gateway }}
+        ssh-keyscan -T 20 -p {{ minio3_ssh_port }} {{ minio_nat_gateway }}
 
   - name: Wait for port 22 to become open, wait for 2 seconds
     wait_for:
@@ -719,7 +719,7 @@ cat >site.yml<<"EOF"
     become_user: root
     shell:
       cmd: |
-        ssh-keyscan -T 20 -p 10422 {{ minio_nat_gateway }}
+        ssh-keyscan -T 20 -p {{ minio4_ssh_port }} {{ minio_nat_gateway }}
 
   - name: Wait for port 22 to become open, wait for 2 seconds
     wait_for:
