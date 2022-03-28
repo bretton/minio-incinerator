@@ -18,7 +18,7 @@ The host computer running `minio-incinerator` needs at least 12 CPU threads, 24G
 ## Quickstart
 To create your own incinerator, init the VMs:
 
-    git clone #url-to-be-added
+    git clone https://github.com/bretton/minio-incinerator.git
     cd minio-incinerator
 
       (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
@@ -90,8 +90,7 @@ PATH=/home/<username>/minio-incinerator/bin:$PATH; export PATH
 
 Download and configure minio-incinerator:
 ```
-fetch minio-incinerator-0.${ver}.tgz
-tar -xzvf minio-incinerator-0.${ver}.tgz
+git clone https://github.com/bretton/minio-incinerator
 cd minio-incinerator
 
   (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
@@ -127,8 +126,7 @@ sudo apt-get update && sudo apt-get install packer vagrant
 
 Download and configure minio-incinerator:
 ```
-wget minio-incinerator-0.${ver}.tgz
-tar -xzvf minio-incinerator-0.${ver}.tgz
+git clone https://github.com/bretton/minio-incinerator.git
 cd minio-incinerator
 
   (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
@@ -190,3 +188,4 @@ Do not add the metric M, or MB or GB! It won't work.
 Sixteen (16) virtual drives will be created of this size, so ensure you have sufficient disk space!
 
 A basic check is done to see if the input figures can be catered to, on init.
+
