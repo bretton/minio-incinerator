@@ -1,3 +1,10 @@
+0.6
+
+* Live on github
+* README updates
+
+---
+
 0.5
 
 * Cluster with 4 nodes, 4 drives each

@@ -163,7 +163,7 @@ The Minio web interface is available on via nginx reverse proxy at https://ACCES
 
 Accept the self-signed certificate TWICE. First is for nginx, second minio. Remember, this is not a production-ready environment. 
 
-Login with user "admin" and password "demopassword" to access the dashboard.
+Login with user `demoadmin` and `NP4c2KzyESKCIEsDk2I2Dmb2HAFsGSxec30Uxiqz` to access the dashboard.
 
 You can now create a bucket and explore settings.
 
