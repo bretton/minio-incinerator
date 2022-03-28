@@ -1,5 +1,5 @@
 # Introduction
-`minio-incinerator` (aka `mininc`) borrows heavily from `potman`, `clusterfurnace` and `cephsmelter` to build a virtualbox minio cluster .
+`minio-incinerator` (aka `mininc`) borrows heavily from [potman](https://github.com/bsdpot/potman), `clusterfurnace` and `cephsmelter` to build a virtualbox minio cluster .
 
 Do not run in production! This is a testing environment to show minio running on FreeBSD.
 
