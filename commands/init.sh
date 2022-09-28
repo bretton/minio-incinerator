@@ -7,11 +7,11 @@ fi
 
 usage()
 {
-  echo "Usage: mininc init [-hv] [-d flavourdir] [-n network] [-r freebsd_version] incinerator_name
+  echo "Usage: mininc init [-hv] [-n network] [-r freebsd_version] incinerator_name
 
     flavourdir defaults to 'flavours'
     network defaults to '10.100.1'
-    freebd_version defaults to '13.0'
+    freebd_version defaults to '13.1'
 "
 }
 
@@ -41,12 +41,11 @@ if [ "${totaldisksize}" -ge "${availablespace}" ]; then
     exit 1; exit 1
 fi
 
-FREEBSD_VERSION=13.0
-FLAVOURS_DIR="flavours"
+FREEBSD_VERSION=13.1
 # Do not change this if using Virtualbox DHCP on primary interface
 GATEWAY="10.0.2.2"
 
-# ToDo: get IP, ping a range to find free IP, set ACCESSIP to free IP.
+# ToDo: get IP, ping a range to find free IP, set ACCESSIP in ../config.ini to a free IP address.
 # getmyip()
 # {
 #     /usr/bin/env perl -MSocket -le 'socket(S, PF_INET, SOCK_DGRAM, getprotobyname(\"udp\")); connect(S, sockaddr_in(1, inet_aton(\"1.1.1.1\"))); print inet_ntoa((sockaddr_in(getsockname(S)))[1]);'
@@ -56,11 +55,8 @@ GATEWAY="10.0.2.2"
 export VAGRANT_EXPERIMENTAL="disks"
 
 OPTIND=1
-while getopts "hvd:n:r:" _o ; do
+while getopts "hv:n:r:" _o ; do
   case "$_o" in
-  d)
-    FLAVOURS_DIR="${OPTARG}"
-    ;;
   h)
     usage
     exit 0
@@ -127,11 +123,6 @@ git init "$INCINERATOR_NAME" >/dev/null
 cd "$INCINERATOR_NAME"
 if [ "$(git branch --show-current)" = "master" ]; then
   git branch -m master main
-fi
-
-if [ "${FLAVOURS_DIR}" = "flavours" ]; then
-  mkdir flavours
-  echo "Place your flavours in this directory" >flavours/README.md
 fi
 
 step "Generate SSH key to upload"
@@ -290,7 +281,7 @@ cat >site.yml<<"EOF"
         - nano
         - vim-tiny
         - sudo
-        - python38
+        - python39
         - rsync
         - tmux
         - jq
@@ -302,7 +293,7 @@ cat >site.yml<<"EOF"
         - nginx
         - minio
         - minio-client
-        - py38-minio
+        - py39-minio
         - nmap
       state: present
 
@@ -908,16 +899,6 @@ cat >site.yml<<"EOF"
       name: nginx
       state: started
 
-  # - name: Enable minio sysrc entries on minio1
-  #   become: yes
-  #   become_user: root
-  #   shell:
-  #     cmd: |
-  #       service minio enable
-  #       sysrc minio_certs="{{ local_openssl_dir }}"
-  #       sysrc minio_env="MINIO_ACCESS_KEY={{ minio_access_key }} MINIO_SECRET_KEY={{ minio_access_password }}"
-  #       sysrc minio_disks="{{ minio1_disk1 }} {{ minio1_disk2 }} {{ minio1_disk3 }} {{ minio1_disk4 }} {{ minio2_disk1 }} {{ minio2_disk2 }} {{ minio2_disk3 }} {{ minio2_disk4 }} {{ minio3_disk1 }} {{ minio3_disk2 }} {{ minio3_disk3 }} {{ minio3_disk4 }} {{ minio4_disk1 }} {{ minio4_disk2 }} {{ minio4_disk3 }} {{ minio4_disk4 }}"
-
   - name: Enable minio sysrc entries on minio1
     become: yes
     become_user: root
@@ -1012,16 +993,6 @@ cat >site.yml<<"EOF"
       chdir: "{{ local_openssl_dir }}"
       cmd: |
         cat {{ local_openssl_public_cert }} CAs/{{ local_openssl_root_cert }} >> {{ local_openssl_nginx_cert }}
-
-  # - name: Enable minio sysrc entries on minio2
-  #   become: yes
-  #   become_user: root
-  #   shell:
-  #     cmd: |
-  #       service minio enable
-  #       sysrc minio_certs="{{ local_openssl_dir }}"
-  #       sysrc minio_env="MINIO_ACCESS_KEY={{ minio_access_key }} MINIO_SECRET_KEY={{ minio_access_password }}"
-  #       sysrc minio_disks="{{ minio1_disk1 }} {{ minio1_disk2 }} {{ minio1_disk3 }} {{ minio1_disk4 }} {{ minio2_disk1 }} {{ minio2_disk2 }} {{ minio2_disk3 }} {{ minio2_disk4 }} {{ minio3_disk1 }} {{ minio3_disk2 }} {{ minio3_disk3 }} {{ minio3_disk4 }} {{ minio4_disk1 }} {{ minio4_disk2 }} {{ minio4_disk3 }} {{ minio4_disk4 }}"
 
   - name: Enable minio sysrc entries on minio2
     become: yes
@@ -1118,16 +1089,6 @@ cat >site.yml<<"EOF"
       cmd: |
         cat {{ local_openssl_public_cert }} CAs/{{ local_openssl_root_cert }} >> {{ local_openssl_nginx_cert }}
 
-  # - name: Enable minio sysrc entries on minio3
-  #   become: yes
-  #   become_user: root
-  #   shell:
-  #     cmd: |
-  #       service minio enable
-  #       sysrc minio_certs="{{ local_openssl_dir }}"
-  #       sysrc minio_env="MINIO_ACCESS_KEY={{ minio_access_key }} MINIO_SECRET_KEY={{ minio_access_password }}"
-  #       sysrc minio_disks="{{ minio1_disk1 }} {{ minio1_disk2 }} {{ minio1_disk3 }} {{ minio1_disk4 }} {{ minio2_disk1 }} {{ minio2_disk2 }} {{ minio2_disk3 }} {{ minio2_disk4 }} {{ minio3_disk1 }} {{ minio3_disk2 }} {{ minio3_disk3 }} {{ minio3_disk4 }} {{ minio4_disk1 }} {{ minio4_disk2 }} {{ minio4_disk3 }} {{ minio4_disk4 }}"
-
   - name: Enable minio sysrc entries on minio3
     become: yes
     become_user: root
@@ -1223,16 +1184,6 @@ cat >site.yml<<"EOF"
       cmd: |
         cat {{ local_openssl_public_cert }} CAs/{{ local_openssl_root_cert }} >> {{ local_openssl_nginx_cert }}
 
-  # - name: Enable minio sysrc entries on minio4
-  #   become: yes
-  #   become_user: root
-  #   shell:
-  #     cmd: |
-  #       service minio enable
-  #       sysrc minio_certs="{{ local_openssl_dir }}"
-  #       sysrc minio_env="MINIO_ACCESS_KEY={{ minio_access_key }} MINIO_SECRET_KEY={{ minio_access_password }}"
-  #       sysrc minio_disks="{{ minio1_disk1 }} {{ minio1_disk2 }} {{ minio1_disk3 }} {{ minio1_disk4 }} {{ minio2_disk1 }} {{ minio2_disk2 }} {{ minio2_disk3 }} {{ minio2_disk4 }} {{ minio3_disk1 }} {{ minio3_disk2 }} {{ minio3_disk3 }} {{ minio3_disk4 }} {{ minio4_disk1 }} {{ minio4_disk2 }} {{ minio4_disk3 }} {{ minio4_disk4 }}"
-
   - name: Enable minio sysrc entries on minio4
     become: yes
     become_user: root
@@ -1252,16 +1203,6 @@ cat >site.yml<<"EOF"
     ansible.builtin.service:
       name: minio
       state: started
-
-# - hosts: minio2
-#   gather_facts: yes
-#   tasks:
-#   - name: Start minio
-#     become: yes
-#     become_user: root
-#     ansible.builtin.service:
-#       name: minio
-#       state: started
 EOF
 
 step "Create Vagrantfile"
@@ -1281,7 +1222,7 @@ Vagrant.configure("2") do |config|
     node.ssh.keep_alive = true
     node.vm.provider "virtualbox" do |vb|
       vb.memory = "4096"
-      vb.cpus = "4"
+      vb.cpus = "6"
       vb.customize ["modifyvm", :id, "--ioapic", "on"]
       vb.customize ["modifyvm", :id, "--vrde", "off"]
       vb.customize ["modifyvm", :id, "--audio", "none"]
@@ -1549,7 +1490,6 @@ vm_manager="vagrant"
 freebsd_version="${FREEBSD_VERSION}"
 network="${NETWORK}"
 gateway="${GATEWAY}"
-flavours_dir="${FLAVOURS_DIR}"
 EOP
 
 step "Creating ansible.cfg"

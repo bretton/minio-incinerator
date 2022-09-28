@@ -104,10 +104,6 @@ function read_potman_config() {
     >&2 echo "invalid network in $1"
     exit 1
   fi
-
-  if [[ "${config_flavours_dir}" = "" ]]; then
-    config_flavours_dir="flavours"
-  fi
 }
 
 # shellcheck disable=SC2154
@@ -154,7 +150,6 @@ Commands:
     startvms    -- Start (and provision) VMs
     status      -- Show status
     stopvms     -- Stop VMs
-    export      -- Export VMs
 "
 }
 
@@ -207,7 +202,7 @@ function main() {
   fi
 
   case "${CMD}" in
-    export|destroyvms|init|packbox|startvms|status|stopvms)
+    destroyvms|init|packbox|startvms|status|stopvms)
        exec_minio_incinerator "${CMD}" "${ARGS[@]}"
       ;;
     *)
