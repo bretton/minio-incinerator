@@ -9,7 +9,6 @@ usage()
 {
   echo "Usage: mininc init [-hv] [-n network] [-r freebsd_version] incinerator_name
 
-    flavourdir defaults to 'flavours'
     network defaults to '10.100.1'
     freebd_version defaults to '13.1'
 "
