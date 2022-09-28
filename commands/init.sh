@@ -1222,7 +1222,7 @@ Vagrant.configure("2") do |config|
     node.ssh.keep_alive = true
     node.vm.provider "virtualbox" do |vb|
       vb.memory = "4096"
-      vb.cpus = "6"
+      vb.cpus = "8"
       vb.customize ["modifyvm", :id, "--ioapic", "on"]
       vb.customize ["modifyvm", :id, "--vrde", "off"]
       vb.customize ["modifyvm", :id, "--audio", "none"]
