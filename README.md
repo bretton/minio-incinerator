@@ -70,8 +70,8 @@ service vboxnet start
     
 (sudo) pw groupmod vboxusers -m <username>
 
-mkdir -p /etc/vbox
-vi /etc/vbox/networks.conf
+mkdir -p /usr/local/etc/vbox
+vi /usr/local/etc/vbox/networks.conf
 ```
 
 (add, with asterisk; this is extremely broad)
