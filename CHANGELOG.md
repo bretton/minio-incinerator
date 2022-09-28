@@ -1,3 +1,10 @@
+0.7
+
+* Update for FreeBSD-13.1
+* Inclusion of Beast-of-Argh system monitoring image
+
+---
+
 0.6
 
 * Live on github

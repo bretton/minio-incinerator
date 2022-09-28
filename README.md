@@ -1,17 +1,17 @@
 # Introduction
 `minio-incinerator` (aka `mininc`) borrows heavily from [potman](https://github.com/bsdpot/potman), `clusterfurnace` and `cephsmelter` to build a virtualbox minio cluster .
 
-Do not run in production! This is a testing environment to show minio running on FreeBSD.
+Do not run in production! This is a testing environment to show minio running on FreeBSD, with Consul and the Beast-of-Argh monitoring solution alongside.
 
 # Outline
 This will bring up 4 minio servers, configured for erasure coding, with a web interface:
-* minio1 (2CPU, 4GB, 4 attached disks, nginx reverse proxy host)
-* minio2 (2CPU, 4GB, 4 attached disks)
-* minio3 (2CPU, 4GB, 4 attached disks)
-* minio4 (2CPU, 4GB, 4 attached disks)
+* minio1 (8CPU, 4GB, 4 attached disks, nginx reverse proxy host, consul jail, beast-of-argh jail)
+* minio2 (4CPU, 4GB, 4 attached disks)
+* minio3 (4CPU, 4GB, 4 attached disks)
+* minio4 (4CPU, 4GB, 4 attached disks)
 
 # Requirements
-The host computer running `minio-incinerator` needs at least 12 CPU threads, 24GB memory, plus 200GB disk space, preferably high speed SSD.
+The host computer running `minio-incinerator` needs at least 16 CPU threads, 24GB memory, plus 200GB disk space, preferably high speed SSD.
 
 # Overview
 
@@ -24,7 +24,8 @@ To create your own incinerator, init the VMs:
       (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
 
     export PATH=$(pwd)/bin:$PATH
-    mininc init -d "$(pwd)/flavours" mycluster
+    (optional: sudo chmod 775 /tmp)
+    mininc init mycluster
     cd mycluster
     mininc packbox
     mininc startvms
@@ -58,7 +59,7 @@ To create your own incinerator, init the VMs:
 
 Install packages, start services and configure permissions and networks
 ```
-pkg install bash git packer py38-ansible py38-packaging vagrant virtualbox-ose
+pkg install bash git packer py39-ansible py39-packaging vagrant virtualbox-ose
 service vboxnet enable
 service vboxnet start
     
@@ -96,7 +97,8 @@ cd minio-incinerator
   (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
 
 export PATH=$(pwd)/bin:$PATH
-mininc init -v -d "$(pwd)/flavours" mycluster
+sudo chmod 775 /tmp
+mininc init -v mycluster
 cd mycluster
 mininc packbox
 mininc startvms
@@ -132,7 +134,7 @@ cd minio-incinerator
   (edit) config.ini and set ACCESSIP to a free IP on LAN, and set DISKSIZE
 
 export PATH=$(pwd)/bin:$PATH
-mininc init -v -d "$(pwd)/flavours" mycluster
+mininc init -v mycluster
 cd mycluster
 mininc packbox
 mininc startvms
@@ -149,7 +151,6 @@ mininc startvms
 
     Commands:
         destroyvms  -- Destroy VMs
-        export      -- Export Vagrant .box files
         help        -- Show usage
         init        -- Initialize new minio-incinerator
         packbox     -- Create vm box image
