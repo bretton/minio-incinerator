@@ -59,7 +59,7 @@ To create your own incinerator, init the VMs:
 
 ### Hosts which underwent an upgrade from 13.0 to 13.1
 
-On hosts which have upgraded frm 13.0 to 13.1, the virtualbox driver gives the following error:
+On hosts which have upgraded from 13.0 to 13.1, the virtualbox driver gives the following error:
 ```
 VBoxHeadless: Error -1908 in suplibOsInit!
 VBoxHeadless: Kernel driver not installed
@@ -88,13 +88,6 @@ The vboxdrv kernel module uses internal kernel APIs.
 
 To avoid crashes due to kernel incompatibility, this module will only
 load on FreeBSD 13.1 kernels.
-```
-
-The kernel modules still need to be installed correctly:
-```
-cd /usr/ports/emulators/virtualbox-ose-kmod/work/stage/boot/modules
-cp *.ko /boot/modules
-kldxref /boot/modules/
 ```
 
 Finally reboot, and confirm working with
