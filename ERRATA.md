@@ -10,30 +10,23 @@ VBoxHeadless: Kernel driver not installed
 VBoxHeadless: Tip! Make sure the kernel module is loaded. It may also help to reinstall VirtualBox.
 ```
 
-To fix this, you need to recompile the `virtualbox-ose-kmod` driver. This is a slightly lengthy process as follows:
+With the September quarterlies, and Virtualbox version 6.1.36, you will need to remove the driver and uninstall Virtualbox, then reboot.
+
 ```
-git clone https://github.com/freebsd/freebsd-src /usr/src
-git clone https://git.freebsd.org/ports.git /usr/ports
-cd /usr/ports/
-git checkout 2022Q2
-cd /usr/ports/emulators/virtualbox-ose-kmod
-make clean deinstall reinstall
+kldunload vboxdrv
+pkg delete -f virtualbox-ose virtualbox-ose-kmod 
 ```
 
-Accept the default options for all the dialogue screens. It will take a short while to compile everything. On success you'll see:
-```
-===> Staging rc.d startup script(s)
-===>  Installing for virtualbox-ose-kmod-6.1.36
-===>  Checking if virtualbox-ose-kmod is already installed
-===>   Registering installation for virtualbox-ose-kmod-6.1.36
-Installing virtualbox-ose-kmod-6.1.36...
-The vboxdrv kernel module uses internal kernel APIs.
+Now reboot, and log back in as root.
 
-To avoid crashes due to kernel incompatibility, this module will only
-load on FreeBSD 13.1 kernels.
+```
+pkg install -y virtualbox-ose virtualbox-ose-kmod
+kldload vboxdrv
+mkdir -p /etc/vbox
+mkdir -p /usr/local/etc/vbox
+echo "* 0.0.0.0/0" > /usr/local/etc/vbox/networks.conf
+ln -s /usr/local/etc/vbox/networks.conf /etc/vbox/networks.conf
+service vboxnet restart
 ```
 
-Finally reboot, and confirm working with
-```
-vboxheadless --version
-```
+The `packbox` and `startvms` commands should work fine now.

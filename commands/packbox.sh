@@ -64,11 +64,12 @@ fi
 step "Initialize"
 
 rm -rf _build/packer
-git clone https://github.com/bretton/packer-FreeBSD.git _build/packer
+git clone -b testing https://github.com/bretton/packer-FreeBSD.git _build/packer
 cd _build/packer
 
-# future-proofing but simply replaces 13.0 with 13.1 currently, changes 32G to 10240 for disk size
-<variables.json.sample sed -e "s|13.0|${FREEBSD_VERSION}|g" -e "s|32G|10240|g" >variables.json
+# future-proofing but simply replaces 13.1 with 13.1 currently
+<variables.json.sample sed -e "s|13.1|${FREEBSD_VERSION}|g" >variables.json
+#<variables.json.sample sed -e "s|13.0|${FREEBSD_VERSION}|g" -e "s|32G|10240|g" >variables.json
 #cp -f variables.json.sample variables.json
 
 #step "Validate packer build files"
